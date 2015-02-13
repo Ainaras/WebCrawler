@@ -1,0 +1,19 @@
+{
+    "name" : "Ainars/WebCrawler",
+    "description" : "Basic web crawler. Helps you to import data from the Internet.",
+    "type" : "library",
+    "authors" : [{
+        "name" : "Ainars",
+        "email" : "ainarsd@gmail.com"
+    }],
+    "keywords" : [
+        "web crawler", "import"
+    ],
+    "require" : {
+    },
+    "autoload" : {
+        "psr-4" : {
+            "Ainars\\WebCrawler" : ""
+        }
+    }
+}

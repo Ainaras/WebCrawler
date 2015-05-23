@@ -11,7 +11,7 @@
     ],
     "require" : {
 		"sunra/php-simple-html-dom-parser": "v1.5.0",
-        "guzzlehttp/guzzle": "dev-master"
+        "guzzlehttp/guzzle": "~5"
     },
     "autoload" : {
         "psr-4" : {

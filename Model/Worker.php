@@ -61,14 +61,14 @@ class Worker
 	 * @param string $initUrl
 	 */
 	public function setInitUrl($initUrl) {
-		$initUrl;
+		$this->initUrl = $initUrl;
 
-		$this->jobsRepo->createChildJob($initUrl, null);
+		$this->jobsRepo->createChildJob($initUrl, null, $initUrl);
 	}
 
 	public function doJob()
 	{
-		$this->currentJob = $this->jobsRepo->get();
+		$this->currentJob = $this->jobsRepo->get($this->initUrl);
 
 		try {
 			$this->_craw();
@@ -79,7 +79,7 @@ class Worker
 			}
 
 			foreach ($this->getNextJobsBuilder()->fromHtml($html) as $todoUrl) {
-				$this->jobsRepo->createChildJob($todoUrl, $this->currentJob);
+				$this->jobsRepo->createChildJob($todoUrl, $this->currentJob, $this->initUrl);
 			}
 
 			if ($this->contentParser->parse($html, $this->currentJob)) {

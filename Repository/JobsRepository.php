@@ -29,12 +29,13 @@ class JobsRepository
 	 * @return Job
 	 * @throws \Exception
 	 */
-	public function get()
+	public function get($initUrl)
 	{
 		$data = $this->db->fetchAssoc(
 			'SELECT *
 				FROM ' . $this->tableName . '
 				WHERE `status` = ' . Job::STATUS_NOT_IMPORTED . '
+					AND init_md5url = \'' . md5($initUrl) .  '\'
 				LIMIT 1');
 
 		if (empty($data)) {
@@ -47,14 +48,16 @@ class JobsRepository
 	/**
 	 * @param string $url
 	 * @param Job $job
+	 * @param string $initUrl
 	 * @return boolean
 	 */
-	public function createChildJob($url, Job $job = null)
+	public function createChildJob($url, Job $job = null, $initUrl)
 	{
 		try {
 			return $this->db->insert($this->tableName, array(
 					'url' => $url,
 					'md5url' => md5($url),
+					'init_md5url' => md5($initUrl),
 					'parent_job_id' => $job ? $job->getId() : null
 			));
 		} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {

@@ -2,10 +2,14 @@
 
 namespace Ainars\WebCrawler\Model;
 
+use Exception;
 use GuzzleHttp\Client;
+use Doctrine\DBAL\Connection;
+use Sunra\PhpSimple\HtmlDomParser;
+use Ainars\WebCrawler\Exception\SkipException;
 use Ainars\WebCrawler\Repository\JobsRepository;
-use Ainars\WebCrawler\Model\JobsBuilderInterface;
-use Ainars\WebCrawler\Model\ContentParserInterface;
+use Ainars\WebCrawler\Contract\JobsBuilderInterface;
+use Ainars\WebCrawler\Contract\ContentParserInterface;
 
 /**
  * @author ainars
@@ -14,7 +18,7 @@ class Worker
 {
 
 	/**
-	 * @var \Doctrine\DBAL\Connection
+	 * @var Connection
 	 */
 	protected $db;
 
@@ -44,7 +48,7 @@ class Worker
 	protected $initUrl;
 
 	public function __construct(
-		\Doctrine\DBAL\Connection $db,
+		Connection $db,
 		JobsBuilderInterface $builder,
 		ContentParserInterface $parser)
 	{
@@ -56,7 +60,7 @@ class Worker
 	}
 
 	/**
-	 * We need it only at begin
+	 * We need this URL only at begin, at first run
 	 *
 	 * @param string $initUrl
 	 */
@@ -73,9 +77,9 @@ class Worker
 		try {
 			$this->_craw();
 
-			$html = \Sunra\PhpSimple\HtmlDomParser::str_get_html($this->currentJob->getHtml());
+			$html = HtmlDomParser::str_get_html($this->currentJob->getHtml());
 			if (!$html) {
-				throw new \Ainars\WebCrawler\Exception\SkipException('no html generated');
+				throw new SkipException('no html is generated');
 			}
 
 			foreach ($this->getNextJobsBuilder()->fromHtml($html) as $todoUrl) {
@@ -88,9 +92,9 @@ class Worker
 				$this->currentJob->setStatus(Job::STATUS_READ);
 			}
 
-		} catch (\Ainars\WebCrawler\Exception\SkipException $ex) {
+		} catch (SkipException $ex) {
 			$this->currentJob->setStatus(Job::STATUS_SKIPPED);
-		} catch (\Exception $ex) {
+		} catch (Exception $ex) {
 			$this->currentJob->setStatus(Job::STATUS_ERROR);
 		}
 
@@ -99,6 +103,9 @@ class Worker
 		return $this->currentJob;
 	}
 
+    /**
+     * @todo what if it is PDF?
+     */
 	protected function _craw()
 	{
 		$client = new Client();

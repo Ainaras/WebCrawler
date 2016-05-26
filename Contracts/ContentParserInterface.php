@@ -1,6 +1,8 @@
 <?php
 
-namespace Ainars\WebCrawler\Model;
+namespace Ainars\WebCrawler\Contract;
+
+use Ainars\WebCrawler\Model\Job;
 
 interface ContentParserInterface {
 

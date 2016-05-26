@@ -1,9 +1,11 @@
 # WebCrawler
 
-## Example
+## Example that saves pages to disc
 
-	$builder = new \Custom\JobsBuilder();
-	$parser = new \Custom\SiteParser();
+    $basisUrl = 'https://example.com';
+
+	$builder = new \Ainars\WebCrawler\Model\DefaultJobsBuilder($basisUrl);
+	$parser = new \Ainars\WebCrawler\Parser\SavePageParser(__DIR__);
 
 	$worker = new Worker($doctrineDbal, $builder, $parser);
 	$worker->setInitUrl($basisUrl);

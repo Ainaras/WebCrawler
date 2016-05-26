@@ -1,6 +1,6 @@
 <?php
 
-namespace Ainars\WebCrawler\Model;
+namespace Ainars\WebCrawler\Contract;
 
 interface JobsBuilderInterface {
 

@@ -2,6 +2,8 @@
 
 namespace Ainars\WebCrawler\Model;
 
+use Ainars\WebCrawler\Contract\JobsBuilderInterface;
+
 class DefaultJobsBuilder implements JobsBuilderInterface
 {
 
@@ -11,7 +13,8 @@ class DefaultJobsBuilder implements JobsBuilderInterface
 	protected $baseUrl;
 
 	/**
-	 * @param string $baseUrl
+     * @todo what if baseUrl is not from where html comes?
+	 * @param string $baseUrl Domain
 	 */
 	public function __construct($baseUrl)
 	{
@@ -19,6 +22,8 @@ class DefaultJobsBuilder implements JobsBuilderInterface
 	}
 
 	/**
+     * sends back all links of page
+     *
 	 * @param \simple_html_dom $html
 	 * @return array
 	 */

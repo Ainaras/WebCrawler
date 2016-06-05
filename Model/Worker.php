@@ -82,7 +82,7 @@ class Worker
 				throw new SkipException('no html is generated');
 			}
 
-			foreach ($this->getNextJobsBuilder()->fromHtml($html) as $todoUrl) {
+			foreach ($this->getNextJobsBuilder()->fromHtml($html, $this->currentJob) as $todoUrl) {
 				$this->jobsRepo->createChildJob($todoUrl, $this->currentJob, $this->initUrl);
 			}
 

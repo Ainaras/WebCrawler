@@ -2,35 +2,35 @@
 
 namespace Ainars\WebCrawler\Model;
 
+use GuzzleHttp\Url;
+use simple_html_dom;
+use Ainars\WebCrawler\Model\Job;
 use Ainars\WebCrawler\Contract\JobsBuilderInterface;
 
 class DefaultJobsBuilder implements JobsBuilderInterface
 {
 
 	/**
-	 * @var string
+	 * @var Url
 	 */
 	protected $baseUrl;
 
 	/**
-     * @todo what if baseUrl is not from where html comes?
-	 * @param string $baseUrl Domain
-	 */
-	public function __construct($baseUrl)
-	{
-		$this->baseUrl = $baseUrl;
-	}
-
-	/**
-     * sends back all links of page
+	 * sends back all urls of links in page
      *
-	 * @param \simple_html_dom $html
+	 * @param simple_html_dom $html
 	 * @return array
 	 */
-	public function fromHtml(\simple_html_dom $html)
+	public function fromHtml(simple_html_dom $html, Job $job)
 	{
+		$this->baseUrl = Url::fromString($job->getUrl());
+
 		$newJobs = [];
 		foreach ($this->_getLinkObjects($html) as $link) {
+			if (empty($link->href)) {
+				continue;
+			}
+
 			if ($this->_canWeSkip($link->href, $link->plaintext)) {
 				continue;
 			}
@@ -45,26 +45,20 @@ class DefaultJobsBuilder implements JobsBuilderInterface
 		return $html->find('a');
 	}
 
-
 	protected function _canWeSkip($url, $text = '') {
-		return $this->_isHashUrl($url);
+		return $this->_isHashUrl($url) || $this->_isMail($url);
 	}
 
 	protected function _isHashUrl($url) {
 		return strpos($url, '#') === 0;
 	}
 
-	protected function _isAbsolutUrl($url) {
-		return strpos($url, 'http://') === 0 or
-			strpos($url, '//') === 0 or
-			strpos($url, 'https://') === 0;
+	protected function _isMail($url) {
+		return strpos($url, 'mailto:') === 0;
 	}
 
 	protected function _buildAbsoluteUrl($url) {
-		if ($this->_isAbsolutUrl($url)) {
-			return $url;
-		}
-
-		return $this->baseUrl . $url;
+		return (string)$this->baseUrl->combine($url);
 	}
+
 }

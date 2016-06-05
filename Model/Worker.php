@@ -103,15 +103,15 @@ class Worker
 		return $this->currentJob;
 	}
 
-    /**
-     * @todo what if it is PDF?
-     */
 	protected function _craw()
 	{
 		$client = new Client();
 		$response = $client->get(
 			$this->currentJob->getUrl()
-			, array('timeout' => 10)
+			, array(
+				'verify' => false,
+				'timeout' => 10
+			)
 		);
 
 		$this->currentJob->setHtml($response->getBody(true));

@@ -7,7 +7,7 @@ CREATE TABLE `import_jobs` (
 	`status` INT(11) UNSIGNED NOT NULL DEFAULT '0',
 	`created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
-	UNIQUE INDEX `md5url` (`md5url`),
+	UNIQUE INDEX `md5url` (`init_md5url`, `md5url`),
 	INDEX `FK_imported_imported` (`parent_job_id`),
 	CONSTRAINT `FK_imported_imported` FOREIGN KEY (`parent_job_id`) REFERENCES `import_jobs` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION
 )

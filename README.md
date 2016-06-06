@@ -1,6 +1,6 @@
 # WebCrawler
 
-## Example that saves pages to disc
+## Example that saves pages to disk
 
     $basisUrl = 'https://example.com';
 

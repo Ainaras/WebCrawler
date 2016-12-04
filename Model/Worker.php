@@ -77,6 +77,14 @@ class Worker
 		$this->jobsRepo->createChildJob($initUrl, null, $initUrl);
 	}
 
+	/**
+	 * door to reset default logger
+	 * @param LoggerInterface $logger
+	 */
+	function setLogger(LoggerInterface $logger) {
+		$this->logger = $logger;
+	}
+
 	public function doJob()
 	{
 		$this->currentJob = $this->jobsRepo->get($this->initUrl);

@@ -2,14 +2,15 @@
 
 namespace Ainars\WebCrawler\Model;
 
-use Exception;
-use GuzzleHttp\Client;
-use Doctrine\DBAL\Connection;
-use Sunra\PhpSimple\HtmlDomParser;
+use Ainars\WebCrawler\Contract\ContentParserInterface;
+use Ainars\WebCrawler\Contract\JobsBuilderInterface;
+use Ainars\WebCrawler\Contract\LoggerInterface;
 use Ainars\WebCrawler\Exception\SkipException;
 use Ainars\WebCrawler\Repository\JobsRepository;
-use Ainars\WebCrawler\Contract\JobsBuilderInterface;
-use Ainars\WebCrawler\Contract\ContentParserInterface;
+use Doctrine\DBAL\Connection;
+use Exception;
+use GuzzleHttp\Client;
+use Sunra\PhpSimple\HtmlDomParser;
 
 /**
  * @author ainars
@@ -47,6 +48,11 @@ class Worker
 	 */
 	protected $initUrl;
 
+	/**
+	 * @var LoggerInterface
+	 */
+	protected $logger;
+
 	public function __construct(
 		Connection $db,
 		JobsBuilderInterface $builder,
@@ -57,6 +63,7 @@ class Worker
 		$this->contentParser = $parser;
 
 		$this->jobsRepo = new JobsRepository($this->db);
+		$this->logger = new DefaultLogger();
 	}
 
 	/**
@@ -73,6 +80,8 @@ class Worker
 	public function doJob()
 	{
 		$this->currentJob = $this->jobsRepo->get($this->initUrl);
+
+		$this->logger->log('INFO', 'Start of: ' . $this->currentJob->getUrl());
 
 		try {
 			$this->_craw();
@@ -94,8 +103,12 @@ class Worker
 
 		} catch (SkipException $ex) {
 			$this->currentJob->setStatus(Job::STATUS_SKIPPED);
+			$this->logger->log('INFO', $ex->toLogString());
 		} catch (Exception $ex) {
 			$this->currentJob->setStatus(Job::STATUS_ERROR);
+			$this->logger->log('ERROR', $ex->getMessage() . ' in ' .
+				$ex->getFile() . ' on ' .
+				$ex->getLine() . ' line.');
 		}
 
 		$this->jobsRepo->save($this->currentJob);

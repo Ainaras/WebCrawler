@@ -2,9 +2,9 @@
 
 namespace Ainars\WebCrawler\Parser;
 
-use simple_html_dom;
-use Ainars\WebCrawler\Model\Job;
 use Ainars\WebCrawler\Contract\ContentParserInterface;
+use Ainars\WebCrawler\Model\Job;
+use simplehtmldom_1_5\simple_html_dom;
 
 /**
  * It is only a example.

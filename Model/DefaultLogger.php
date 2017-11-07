@@ -2,12 +2,12 @@
 
 namespace Ainars\WebCrawler\Model;
 
-use Ainars\WebCrawler\Contract\LoggerInterface;
+use Psr\Log\AbstractLogger;
 
-class DefaultLogger implements LoggerInterface
+class DefaultLogger extends AbstractLogger
 {
-	public function log($severity, $message) {
-		echo '[' . date('Y-m-d H:i:s') . '] ' . $severity . ' ' . $message . PHP_EOL;
+	public function log($level, $message, array $context = array()) {
+		echo '[' . date('Y-m-d H:i:s') . '] ' . $level . ' ' . $message . PHP_EOL;
 	}
 
 }

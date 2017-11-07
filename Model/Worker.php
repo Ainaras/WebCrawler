@@ -4,12 +4,12 @@ namespace Ainars\WebCrawler\Model;
 
 use Ainars\WebCrawler\Contract\ContentParserInterface;
 use Ainars\WebCrawler\Contract\JobsBuilderInterface;
-use Ainars\WebCrawler\Contract\LoggerInterface;
 use Ainars\WebCrawler\Exception\SkipException;
 use Ainars\WebCrawler\Repository\JobsRepository;
 use Doctrine\DBAL\Connection;
 use Exception;
 use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Sunra\PhpSimple\HtmlDomParser;
 
 /**

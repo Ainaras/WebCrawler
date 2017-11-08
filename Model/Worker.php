@@ -89,7 +89,7 @@ class Worker
 	{
 		$this->currentJob = $this->jobsRepo->get($this->initUrl);
 
-		$this->logger->log('INFO', 'Start of: ' . $this->currentJob->getUrl());
+		$this->logger->info('Start of: ' . $this->currentJob->getUrl());
 
 		try {
 			$this->_craw();
@@ -111,10 +111,10 @@ class Worker
 
 		} catch (SkipException $ex) {
 			$this->currentJob->setStatus(Job::STATUS_SKIPPED);
-			$this->logger->log('INFO', $ex->toLogString());
+			$this->logger->info($ex->toLogString());
 		} catch (Exception $ex) {
 			$this->currentJob->setStatus(Job::STATUS_ERROR);
-			$this->logger->log('ERROR', $ex->getMessage() . ' in ' .
+			$this->logger->error($ex->getMessage() . ' in ' .
 				$ex->getFile() . ' on ' .
 				$ex->getLine() . ' line.');
 		}

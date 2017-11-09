@@ -73,4 +73,24 @@ class JobsRepositoryTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
+	public function testGetStatus() {
+		$url = 'b';
+		$this->db->insert('import_jobs', array(
+			'url' => $url,
+			'md5url' => md5($url),
+			'init_md5url' => md5($url),
+			'status' => 2,
+			'parent_job_id' => null
+		));
+
+		$repo = new JobsRepository($this->db);
+
+		$result = $repo->getStatus('u');
+		$this->assertEquals(array_sum($result), 1);
+		$result = $repo->getStatus('b');
+		$this->assertEquals(array_sum($result), 1);
+		$result = $repo->getStatus('c');
+		$this->assertEquals(array_sum($result), 0);
+	}
+
 }

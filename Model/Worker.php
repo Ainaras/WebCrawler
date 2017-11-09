@@ -15,8 +15,7 @@ use Sunra\PhpSimple\HtmlDomParser;
 /**
  * @author ainars
  */
-class Worker
-{
+class Worker {
 
 	/**
 	 * @var Connection
@@ -53,10 +52,7 @@ class Worker
 	 */
 	protected $logger;
 
-	public function __construct(
-		Connection $db,
-		JobsBuilderInterface $builder,
-		ContentParserInterface $parser)
+	public function __construct(Connection $db, JobsBuilderInterface $builder, ContentParserInterface $parser)
 	{
 		$this->db = $db;
 		$this->nextJobsBuilder = $builder;
@@ -71,7 +67,8 @@ class Worker
 	 *
 	 * @param string $initUrl
 	 */
-	public function setInitUrl($initUrl) {
+	public function setInitUrl($initUrl)
+	{
 		$this->initUrl = $initUrl;
 
 		$this->jobsRepo->createChildJob($initUrl, null, $initUrl);
@@ -81,7 +78,8 @@ class Worker
 	 * door to reset default logger
 	 * @param LoggerInterface $logger
 	 */
-	function setLogger(LoggerInterface $logger) {
+	function setLogger(LoggerInterface $logger)
+	{
 		$this->logger = $logger;
 	}
 
@@ -108,18 +106,19 @@ class Worker
 			} else {
 				$this->currentJob->setStatus(Job::STATUS_READ);
 			}
-
 		} catch (SkipException $ex) {
 			$this->currentJob->setStatus(Job::STATUS_SKIPPED);
 			$this->logger->info($ex->toLogString());
 		} catch (Exception $ex) {
 			$this->currentJob->setStatus(Job::STATUS_ERROR);
 			$this->logger->error($ex->getMessage() . ' in ' .
-				$ex->getFile() . ' on ' .
-				$ex->getLine() . ' line.');
+					$ex->getFile() . ' on ' .
+					$ex->getLine() . ' line.');
 		}
 
 		$this->jobsRepo->save($this->currentJob);
+
+		$this->logStatus();
 
 		return $this->currentJob;
 	}
@@ -128,11 +127,11 @@ class Worker
 	{
 		$client = new Client();
 		$response = $client->get(
-			$this->currentJob->getUrl()
-			, array(
-				'verify' => false,
-				'timeout' => 10
-			)
+				$this->currentJob->getUrl()
+				, array(
+			'verify' => false,
+			'timeout' => 10
+				)
 		);
 
 		$this->currentJob->setHtml($response->getBody(true));
@@ -141,7 +140,20 @@ class Worker
 	/**
 	 * @return JobsBuilderInterface
 	 */
-	protected function getNextJobsBuilder() {
+	protected function getNextJobsBuilder()
+	{
 		return $this->nextJobsBuilder;
 	}
+
+	protected function logStatus()
+	{
+		$status = $this->jobsRepo->getStatus($this->initUrl);
+		$total = array_sum($status);
+		if ($total) {
+			$totalTodo = $status[Job::STATUS_NOT_IMPORTED];
+			$totalProcessed = $total - $totalTodo;
+			$this->logger->info('Status of ' . $total . ' jobs: ' . number_format($totalProcessed / $total, 2) . '%');
+		}
+	}
+
 }

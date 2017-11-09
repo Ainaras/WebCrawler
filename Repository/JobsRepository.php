@@ -78,8 +78,33 @@ class JobsRepository {
 	public function save(Job $job)
 	{
 		return $this->db->update($this->tableName, array(
-				'status' => $job->getStatus()
-			), ['id' => $job->getId()]);
+					'status' => $job->getStatus()
+						), ['id' => $job->getId()]);
+	}
+
+	public function getStatus($initUrl)
+	{
+		$sql = 'SELECT `status`, count(*) as total
+				FROM ' . $this->tableName . '
+				WHERE init_md5url = :init_md5
+				GROUP BY status';
+
+		$data = $this->db->fetchAll($sql, [
+			'init_md5' => md5($initUrl)
+		]);
+
+		$result = [
+			Job::STATUS_NOT_IMPORTED => 0,
+			Job::STATUS_READ => 0,
+			Job::STATUS_IMPORTED => 0,
+			Job::STATUS_ERROR => 0,
+			Job::STATUS_SKIPPED => 0
+		];
+		foreach ($data as $row) {
+			$result[$row['status']] = $row['total'];
+		}
+
+		return $result;
 	}
 
 }

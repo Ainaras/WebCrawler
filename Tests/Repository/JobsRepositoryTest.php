@@ -53,7 +53,6 @@ class JobsRepositoryTest extends PHPUnit_Framework_TestCase {
 
 	public function testGet()
 	{
-
 		$repo = new JobsRepository($this->db);
 
 		$result = $repo->get('u');
@@ -64,7 +63,6 @@ class JobsRepositoryTest extends PHPUnit_Framework_TestCase {
 
 	public function testGetNonExisting()
 	{
-
 		$repo = new JobsRepository($this->db);
 
 		try {

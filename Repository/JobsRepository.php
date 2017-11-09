@@ -3,12 +3,14 @@
 namespace Ainars\WebCrawler\Repository;
 
 use Ainars\WebCrawler\Model\Job;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Exception;
 
-class JobsRepository
-{
+class JobsRepository {
 
 	/**
-	 * @var \Doctrine\DBAL\Connection
+	 * @var Connection
 	 */
 	protected $db;
 
@@ -18,28 +20,32 @@ class JobsRepository
 	protected $tableName = 'import_jobs';
 
 	/**
-	 * @param \Doctrine\DBAL\Connection $db
+	 * @param Connection $db
 	 */
-	public function __construct(\Doctrine\DBAL\Connection $db)
+	public function __construct(Connection $db)
 	{
 		$this->db = $db;
 	}
 
 	/**
 	 * @return Job
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function get($initUrl)
 	{
-		$data = $this->db->fetchAssoc(
-			'SELECT *
+		$sql = 'SELECT *
 				FROM ' . $this->tableName . '
-				WHERE `status` = ' . Job::STATUS_NOT_IMPORTED . '
-					AND init_md5url = \'' . md5($initUrl) .  '\'
-				LIMIT 1');
+				WHERE `status` = :status
+					AND init_md5url = :init_md5
+				LIMIT 1';
+
+		$data = $this->db->fetchAssoc($sql, [
+			'status' => Job::STATUS_NOT_IMPORTED,
+			'init_md5' => md5($initUrl)
+		]);
 
 		if (empty($data)) {
-			throw new \Exception('All jobs are done!');
+			throw new Exception('All jobs are done!');
 		}
 
 		return new Job($data['url'], $data['id'], $data['status']);
@@ -55,12 +61,12 @@ class JobsRepository
 	{
 		try {
 			return $this->db->insert($this->tableName, array(
-					'url' => $url,
-					'md5url' => md5($url),
-					'init_md5url' => md5($initUrl),
-					'parent_job_id' => $job ? $job->getId() : null
+						'url' => $url,
+						'md5url' => md5($url),
+						'init_md5url' => md5($initUrl),
+						'parent_job_id' => $job ? $job->getId() : null
 			));
-		} catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException $e) {
 			return false;
 		}
 	}
@@ -73,7 +79,7 @@ class JobsRepository
 	{
 		return $this->db->update($this->tableName, array(
 				'status' => $job->getStatus()
-				), ['id' => $job->getId()]);
+			), ['id' => $job->getId()]);
 	}
 
 }

@@ -152,7 +152,7 @@ class Worker {
 		if ($total) {
 			$totalTodo = $status[Job::STATUS_NOT_IMPORTED];
 			$totalProcessed = $total - $totalTodo;
-			$this->logger->info('Status of ' . $total . ' jobs: ' . number_format($totalProcessed / $total, 2) . '%');
+			$this->logger->info('Status of ' . $total . ' jobs: ' . number_format(100 * $totalProcessed / $total, 2) . '%');
 		}
 	}
 

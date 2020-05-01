@@ -1,5 +1,5 @@
 {
-    "name" : "Ainars/WebCrawler",
+    "name" : "ainars/web-crawler",
     "description" : "Basic web crawler. Helps you to import data from the Internet.",
     "type" : "library",
     "authors" : [{
@@ -7,13 +7,14 @@
         "email" : "ainarsd@gmail.com"
     }],
     "keywords" : [
-        "web crawler", "import"
+        "web crawler",
+        "import"
     ],
     "require" : {
 		"sunra/php-simple-html-dom-parser": "v1.5.2",
         "guzzlehttp/guzzle": "~5",
         "doctrine/dbal": "~2.2",
-        "psr/log": "1.0.2"
+        "psr/log": "~1.1"
     },
     "autoload" : {
         "psr-4" : {

@@ -11,7 +11,7 @@
         "import"
     ],
     "require" : {
-		"sunra/php-simple-html-dom-parser": "v1.5.2",
+        "sunra/php-simple-html-dom-parser": "v1.5.2",
         "guzzlehttp/guzzle": "~5",
         "doctrine/dbal": "~2.2",
         "psr/log": "~1.1"

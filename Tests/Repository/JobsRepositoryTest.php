@@ -4,8 +4,11 @@ use Ainars\WebCrawler\Model\Job;
 use Ainars\WebCrawler\Repository\JobsRepository;
 use Doctrine\DBAL\DriverManager;
 
-class JobsRepositoryTest extends PHPUnit_Framework_TestCase {
+class JobsRepositoryTest extends PHPUnit\Framework\TestCase {
 
+	/**
+	 * @var \Doctrine\DBAL\Connection
+	 */
 	protected $db;
 
 	protected function setUp()

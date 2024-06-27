@@ -2,16 +2,14 @@
 
 use Ainars\WebCrawler\Model\Job;
 use Ainars\WebCrawler\Repository\JobsRepository;
+use \Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 
 class JobsRepositoryTest extends PHPUnit\Framework\TestCase {
 
-	/**
-	 * @var \Doctrine\DBAL\Connection
-	 */
-	protected $db;
+	protected Connection $db;
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 
@@ -47,7 +45,7 @@ class JobsRepositoryTest extends PHPUnit\Framework\TestCase {
 		));
 	}
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 

@@ -1,3 +1,5 @@
 nbproject/
 vendor/
 /Tests/test.sqlite
+.phpunit.result.cache
+composer.lock

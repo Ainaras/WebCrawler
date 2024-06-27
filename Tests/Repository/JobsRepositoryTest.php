@@ -24,7 +24,7 @@ class JobsRepositoryTest extends PHPUnit\Framework\TestCase {
 		];
 		$this->db = DriverManager::getConnection($data);
 
-		$this->db->exec("CREATE TABLE IF NOT EXISTS `import_jobs` (
+		$this->db->executeQuery("CREATE TABLE IF NOT EXISTS `import_jobs` (
 				`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 				`parent_job_id`	INTEGER,
 				`init_md5url`	TEXT NOT NULL,

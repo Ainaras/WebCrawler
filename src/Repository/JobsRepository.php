@@ -29,7 +29,7 @@ class JobsRepository {
 					AND init_md5url = :init_md5
 				LIMIT 1';
 
-		$data = $this->db->fetchAssoc($sql, [
+		$data = $this->db->fetchAssociative($sql, [
 			'status' => Job::STATUS_NOT_IMPORTED,
 			'init_md5' => md5($initUrl)
 		]);
@@ -78,7 +78,7 @@ class JobsRepository {
 				WHERE init_md5url = :init_md5
 				GROUP BY status';
 
-		$data = $this->db->fetchAll($sql, [
+		$data = $this->db->fetchAllAssociative($sql, [
 			'init_md5' => md5($initUrl)
 		]);
 

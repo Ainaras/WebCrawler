@@ -17,40 +17,19 @@ use Sunra\PhpSimple\HtmlDomParser;
  */
 class Worker {
 
-	/**
-	 * @var Connection
-	 */
-	protected $db;
+	protected Connection $db;
 
-	/**
-	 * @var Job
-	 */
-	protected $currentJob;
+	protected Job $currentJob;
 
-	/**
-	 * @var JobsRepository
-	 */
-	protected $jobsRepo;
+	protected JobsRepository $jobsRepo;
 
-	/**
-	 * @var JobsBuilderInterface
-	 */
-	protected $nextJobsBuilder;
+	protected JobsBuilderInterface $nextJobsBuilder;
 
-	/**
-	 * @var ContentParserInterface
-	 */
-	protected $contentParser;
+	protected ContentParserInterface $contentParser;
 
-	/**
-	 * @var string
-	 */
-	protected $initUrl;
+	protected string $initUrl;
 
-	/**
-	 * @var LoggerInterface
-	 */
-	protected $logger;
+	protected LoggerInterface $logger;
 
 	public function __construct(Connection $db, JobsBuilderInterface $builder, ContentParserInterface $parser)
 	{
@@ -64,10 +43,8 @@ class Worker {
 
 	/**
 	 * We need this URL only at begin, at first run
-	 *
-	 * @param string $initUrl
 	 */
-	public function setInitUrl($initUrl)
+	public function setInitUrl(string $initUrl): void
 	{
 		$this->initUrl = $initUrl;
 
@@ -76,14 +53,13 @@ class Worker {
 
 	/**
 	 * door to reset default logger
-	 * @param LoggerInterface $logger
 	 */
-	function setLogger(LoggerInterface $logger)
+	function setLogger(LoggerInterface $logger): void
 	{
 		$this->logger = $logger;
 	}
 
-	public function doJob()
+	public function doJob(): Job
 	{
 		$this->currentJob = $this->jobsRepo->get($this->initUrl);
 
@@ -123,7 +99,7 @@ class Worker {
 		return $this->currentJob;
 	}
 
-	protected function _craw()
+	protected function _craw(): void
 	{
 		$client = new Client();
 		$response = $client->get(
@@ -137,15 +113,12 @@ class Worker {
 		$this->currentJob->setHtml($response->getBody(true));
 	}
 
-	/**
-	 * @return JobsBuilderInterface
-	 */
-	protected function getNextJobsBuilder()
+	protected function getNextJobsBuilder(): JobsBuilderInterface
 	{
 		return $this->nextJobsBuilder;
 	}
 
-	protected function logStatus()
+	protected function logStatus(): void
 	{
 		$status = $this->jobsRepo->getStatus($this->initUrl);
 		$total = array_sum($status);

@@ -9,29 +9,19 @@ use Exception;
 
 class JobsRepository {
 
-	/**
-	 * @var Connection
-	 */
-	protected $db;
+	protected Connection $db;
 
-	/**
-	 * @var string
-	 */
-	protected $tableName = 'import_jobs';
+	protected string $tableName = 'import_jobs';
 
-	/**
-	 * @param Connection $db
-	 */
 	public function __construct(Connection $db)
 	{
 		$this->db = $db;
 	}
 
 	/**
-	 * @return Job
 	 * @throws Exception
 	 */
-	public function get($initUrl)
+	public function get($initUrl): Job
 	{
 		$sql = 'SELECT *
 				FROM ' . $this->tableName . '
@@ -51,38 +41,37 @@ class JobsRepository {
 		return new Job($data['url'], $data['id'], $data['status']);
 	}
 
-	/**
-	 * @param string $url
-	 * @param Job $job
-	 * @param string $initUrl
-	 * @return boolean
-	 */
-	public function createChildJob($url, Job $job = null, $initUrl)
+	public function createChildJob(string $url, Job $job = null, string $initUrl = ''): bool
 	{
 		try {
-			return $this->db->insert($this->tableName, array(
-						'url' => $url,
-						'md5url' => md5($url),
-						'init_md5url' => md5($initUrl),
-						'parent_job_id' => $job ? $job->getId() : null
-			));
+			return (bool)$this->db->insert(
+				$this->tableName, 
+				[
+					'url' => $url,
+					'md5url' => md5($url),
+					'init_md5url' => md5($initUrl),
+					'parent_job_id' => $job ? $job->getId() : null
+				]
+			);
 		} catch (UniqueConstraintViolationException $e) {
 			return false;
 		}
 	}
 
-	/**
-	 * @param Job $job
-	 * @return boolean
-	 */
-	public function save(Job $job)
+	public function save(Job $job): bool
 	{
-		return $this->db->update($this->tableName, array(
-					'status' => $job->getStatus()
-						), ['id' => $job->getId()]);
+		return $this->db->update(
+			$this->tableName, 
+			[
+				'status' => $job->getStatus(),
+			], 
+			[
+				'id' => $job->getId(),
+			]
+		);
 	}
 
-	public function getStatus($initUrl)
+	public function getStatus($initUrl): array
 	{
 		$sql = 'SELECT `status`, count(*) as total
 				FROM ' . $this->tableName . '

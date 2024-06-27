@@ -15,12 +15,10 @@ class SavePageParser implements ContentParserInterface
 
     /**
      * Base dir where to save page
-     *
-     * @var string
      */
-    protected $_baseDir;
+    protected string $_baseDir;
 
-    function __construct($baseDir)
+    function __construct(string $baseDir)
     {
         $this->_baseDir = $baseDir;
     }

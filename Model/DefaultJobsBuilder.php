@@ -11,9 +11,8 @@ class DefaultJobsBuilder implements JobsBuilderInterface {
 
 	/**
 	 * current url
-	 * @var Url
 	 */
-	protected $baseUrl;
+	protected Url $baseUrl;
 
 	/**
 	 * array of regexp to check absolute URL.
@@ -24,11 +23,9 @@ class DefaultJobsBuilder implements JobsBuilderInterface {
 
 	/**
 	 * sends back all urls of links in page
-	 *
-	 * @param simple_html_dom $html
-	 * @return array
+	 * @return string[]
 	 */
-	public function fromHtml(simple_html_dom $html, Job $job)
+	public function fromHtml(simple_html_dom $html, Job $job): array
 	{
 		$this->baseUrl = Url::fromString($job->getUrl());
 
@@ -53,7 +50,7 @@ class DefaultJobsBuilder implements JobsBuilderInterface {
 		return $html->find('a');
 	}
 
-	protected function _canWeSkip($url, $text = '')
+	protected function _canWeSkip($url, $text = ''): bool
 	{
 		if ($this->_isHashUrl($url) || $this->_isMail($url)) {
 			return true;
@@ -71,17 +68,17 @@ class DefaultJobsBuilder implements JobsBuilderInterface {
 		return false;
 	}
 
-	protected function _isHashUrl($url)
+	protected function _isHashUrl($url): bool
 	{
 		return strpos($url, '#') === 0;
 	}
 
-	protected function _isMail($url)
+	protected function _isMail($url): bool
 	{
 		return strpos($url, 'mailto:') === 0;
 	}
 
-	protected function _buildAbsoluteUrl($url)
+	protected function _buildAbsoluteUrl(string $url): string
 	{
 		return (string) $this->baseUrl->combine($url);
 	}

@@ -11,90 +11,45 @@ class Job
 	const STATUS_ERROR = 3;
 	const STATUS_SKIPPED = 4;
 
-	/**
-	 * @var int
-	 */
-	protected $id;
+	protected string $html = '';
 
-	/**
-	 * @var int
-	 */
-	protected $status;
+	public function __construct(
+		protected string $url, 
+		protected int $id, 
+		protected int $status,
+	) {}
 
-	/**
-	 * @var string
-	 */
-	protected $url;
-
-	/**
-	 * @var string
-	 */
-	protected $html;
-
-	/**
-	 * @param string $url
-	 * @param int $id
-	 * @param int $status
-	 */
-	public function __construct($url, $id, $status)
-	{
-		$this->url = $url;
-		$this->id = $id;
-		$this->status = $status;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getId()
+	public function getId(): int
 	{
 		return $this->id;
 	}
 
-	/**
-	 * @return int
-	 */
-	public function getStatus()
+	public function getStatus(): int
 	{
 		return $this->status;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isDone()
+	public function isDone(): bool
 	{
 		return $this->status == self::STATUS_IMPORTED;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getUrl()
+	public function getUrl(): string
 	{
 		return $this->url;
 	}
 
-	/**
-	 * @param int $status
-	 */
-	public function setStatus($status)
+	public function setStatus(int $status): void
 	{
 		$this->status = $status;
 	}
 
-	/**
-	 * @param string $html
-	 */
-	public function setHtml($html)
+	public function setHtml(string $html): void
 	{
 		$this->html = $html;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getHtml()
+	public function getHtml(): string
 	{
 		return $this->html;
 	}

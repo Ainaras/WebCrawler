@@ -22,7 +22,7 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Ainars\\WebCrawler\\" : ""
+            "Ainars\\WebCrawler\\" : "src"
         }
     },
     "scripts": {

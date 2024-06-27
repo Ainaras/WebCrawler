@@ -22,6 +22,6 @@ jobs:
         test_suffix: Test.php
     - uses: php-actions/phpstan@v3
       with:
-        path: "./"
+        path: src
         configuration: phpstan.neon
         php_version: "8.2"

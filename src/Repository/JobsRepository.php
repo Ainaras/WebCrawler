@@ -21,7 +21,7 @@ class JobsRepository {
 	/**
 	 * @throws Exception
 	 */
-	public function get($initUrl): Job
+	public function get(string $initUrl): Job
 	{
 		$sql = 'SELECT *
 				FROM ' . $this->tableName . '
@@ -60,7 +60,7 @@ class JobsRepository {
 
 	public function save(Job $job): bool
 	{
-		return $this->db->update(
+		return (bool)$this->db->update(
 			$this->tableName, 
 			[
 				'status' => $job->getStatus(),
@@ -71,7 +71,10 @@ class JobsRepository {
 		);
 	}
 
-	public function getStatus($initUrl): array
+	/**
+	 * @return array<int,int>
+	 */
+	public function getStatus(string $initUrl): array
 	{
 		$sql = 'SELECT `status`, count(*) as total
 				FROM ' . $this->tableName . '

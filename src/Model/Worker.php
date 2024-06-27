@@ -10,7 +10,7 @@ use Doctrine\DBAL\Connection;
 use Exception;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
-use Sunra\PhpSimple\HtmlDomParser;
+use KubAT\PhpSimple\HtmlDomParser;
 
 /**
  * @author ainars

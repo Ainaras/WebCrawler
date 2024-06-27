@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: skdevelopers/set-php@v1.0.0
+    - uses: php-actions/composer@v6
 
     - name: Validate composer.json and composer.lock
       run: composer validate

@@ -4,7 +4,7 @@ namespace Ainars\WebCrawler\Parser;
 
 use Ainars\WebCrawler\Contract\ContentParserInterface;
 use Ainars\WebCrawler\Model\Job;
-use simplehtmldom_1_5\simple_html_dom;
+use simple_html_dom\simple_html_dom;
 
 /**
  * It is only a example.

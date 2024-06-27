@@ -23,4 +23,5 @@ jobs:
     - uses: php-actions/phpstan@v3
       with:
         path: "./"
+        configuration: phpstan.neon
         php_version: "8.2"

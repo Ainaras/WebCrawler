@@ -20,3 +20,4 @@ jobs:
       with: 
         php_version: "8.2"
         configuration: ./phpunit.xml
+        test_suffix: Test.php
